@@ -46,8 +46,8 @@ jobs:
            sudo useradd -m ${{ github.event.inputs.username }}
            sudo adduser ${{ github.event.inputs.username }} sudo
            echo "${{ github.event.inputs.username }}:${{ github.event.inputs.password }}" | sudo chpasswd
-           sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd
-           echo -e "${{ github.event.inputs.password }}\n${{ github.event.inputs.password }}" | sudo passwd "$USER"       
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd
+           sudo echo -e "${{ github.event.inputs.password }}\n${{ github.event.inputs.password }}" | sudo passwd "$USER"       
       - name: setting up ssh
         run: |
            sudo service ssh status
