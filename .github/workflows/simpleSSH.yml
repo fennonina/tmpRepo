@@ -37,10 +37,11 @@ jobs:
            echo -----[ completed ]------
       - name: user settings
         run: |
-            if [[ -z "${{ github.event.inputs.username }}" ]]; then
-           echo "Please set 'LINUX_USER_PASSWORD' for user: $USER"
-           exit 3
+           if [[ -z "${{ github.event.inputs.username }}" ]]; then
+             echo "Please set 'LINUX_USER_PASSWORD' for user: $USER"
+             exit 3
            fi
+           
            sudo -i
            sudo useradd -m ${{ github.event.inputs.username }}
            sudo adduser ${{ github.event.inputs.username }} sudo
