@@ -37,11 +37,16 @@ jobs:
            echo -----[ completed ]------
       - name: user settings
         run: |
-           echo ====[Adding the user ${{ inputs.username }} ]====
-           echo
-           wget https://raw.githubusercontent.com/fennonina/yamlTest-docker/main/usercreator.sh
-           chmod +x usercreator.sh
-           sudo ./usercreator.sh -u ${{ github.event.inputs.username }} -p ${{ github.event.inputs.password }}        
+            if [[ -z "${{ github.event.inputs.username }}" ]]; then
+           echo "Please set 'LINUX_USER_PASSWORD' for user: $USER"
+           exit 3
+           fi
+           sudo -i
+           sudo useradd -m ${{ github.event.inputs.username }}
+           sudo adduser ${{ github.event.inputs.username }} sudo
+           echo "${{ github.event.inputs.username }}:${{ github.event.inputs.password }}" | sudo chpasswd
+           sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd
+           echo -e "${{ github.event.inputs.password }}\n${{ github.event.inputs.password }}" | sudo passwd "$USER"       
       - name: setting up ssh
         run: |
            sudo service ssh status
@@ -62,7 +67,7 @@ jobs:
            echo password : ${{ github.event.inputs.password }}
            echo
            echo "SSH Address:"
-           wget https://raw.githubusercontent.com/fennonina/yamlTest-docker/main/ngurl.sh
+           wget https://raw.githubusercontent.com/fennonina/yamlTest-docker/main/ngurl.sh > /dev/null 2>&1
            sudo chmod +x ngurl.sh ; sudo ./ngurl.sh
            echo
            echo =========================
