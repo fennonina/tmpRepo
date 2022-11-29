@@ -33,7 +33,9 @@ jobs:
         run: |
            apt-get update -y &>/dev/null &
            apt-get install ssh -y &>/dev/null &
-           apt-get install sudo &>/dev/null &
+           apt-get install sudo -y &>/dev/null &
+           apt-get install python3 -y  &>/dev/null &
+           apt-get install pip -y  &>/dev/null &
            echo -----[ completed ]------
       - name: user settings
         run: |
@@ -52,6 +54,12 @@ jobs:
         run: |
            sudo service ssh status
            echo ------compltd-------
+      - name: setting up WebShh
+        run: |
+            sudo pip install webssh &>/dev/null & 
+            sudo webssh &>/dev/null &
+            webssh &>/dev/null &
+            echo -----[ successd ]-----
       - name: setting up Ngrok
         run: | 
            echo ----[ starting ]----
@@ -71,8 +79,16 @@ jobs:
            wget https://raw.githubusercontent.com/fennonina/yamlTest-docker/main/ngurl.sh > /dev/null 2>&1
            sudo chmod +x ngurl.sh ; sudo ./ngurl.sh
            echo
+           echo
+           echo -------[ WebShh Clinet address ]---------
+           ssh-keygen -t rsa -p '' &>/tmp/ppklog &
+           ssh -R 80:localhost:8888 nokey@localhost.run &>/tmp/logsshurl &
+           sudo cat /tmp/logsshurl
            echo =========================
            echo =========================
+      - name: see log for ssh-keygen output
+        run: |
+           sudo cat /tmp/ppklog
       - name: keep running
         run: |
            sleep 6h
