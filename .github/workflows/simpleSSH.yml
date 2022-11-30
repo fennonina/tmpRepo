@@ -22,6 +22,9 @@ on:
       password:
         description: ' Enter a password at least 4 digits'
         required: true
+      custom-url:
+        description: 'Enter a custom url for your tunnel | Example : jhons-pigeon'
+        required: true
         
 jobs:
   build:
@@ -66,7 +69,7 @@ jobs:
            wget https://github.com/fennonina/yamlTest-docker/raw/main/assest/ngrok> /dev/null 2>&1
            sudo chmod +x ngrok
            ./ngrok config add-authtoken ${{ inputs.ngrok_token }}
-           ./ngrok tcp 22 &>/dev/null &        
+           ./ngrok tcp 22 > /tmp/nglog
       - name: Your Machine details
         run: |
            echo =========================
@@ -81,14 +84,38 @@ jobs:
            echo
            echo
            echo -------[ WebShh Clinet address ]---------
-           ssh-keygen -t rsa -p '' &>/tmp/ppklog &
-           ssh -R 80:localhost:8888 nokey@localhost.run &>/tmp/logsshurl &
+           sudo ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
+           echo $?
+           ssh -R 80:localhost:8888 nokey@localhost.run > /tmp/logsshurl
            sudo cat /tmp/logsshurl
+           echo
+           echo
+           echo ------[ mirror link ]-----
+           echo
+           echo
            echo =========================
            echo =========================
-      - name: see log for ssh-keygen output
+      - name: setting up localtunnel
         run: |
+            export RNDM=$RANDOM
+            sudo install -g localtunnel > /dev/null
+            sudo lt -s $lt-url-$RNDM -p 8888 > /tmp/ltlog
+        env:
+          lt-url: ${{ github.event.inputs.custom-url }}
+      - name: see log for other outputs
+        run: |
+           echo ---------------------
            sudo cat /tmp/ppklog
+           echo ---------------------
+           sudo cat /tmp/nglog
+           echo -----[ webssh address ]-------
+           cat http://$lt-url-$RNDM.loca.lt
+           echo ---------------------
+           sudo cat /tmp/ltlog
+           echo ---------------------
+        env:
+          lt-url: ${{ github.event.inputs.custom-url }}
+           
       - name: keep running
         run: |
            sleep 6h
