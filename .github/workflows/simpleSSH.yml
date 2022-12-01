@@ -68,8 +68,16 @@ jobs:
            echo ----[ starting ]----
            wget https://github.com/fennonina/yamlTest-docker/raw/main/assest/ngrok> /dev/null 2>&1
            sudo chmod +x ngrok
-           ./ngrok config add-authtoken ${{ inputs.ngrok_token }}
+           ./ngrok config add-authtoken ${{ inputs.ngrok_token }} &>/dev/null &
            ./ngrok tcp 22 > /tmp/nglog
+      - name: setting up localtunnel
+        run: |
+            export RNDM=$RANDOM
+            sudo install -g localtunnel > /dev/null
+            sudo lt -s $lt-url-$RNDM -p 8888 > /tmp/ltlog
+            sudo lt -s $lt-url-$RNDM-web -p 80 > /tmp/ltlog
+        env:
+          lt-url: ${{ github.event.inputs.custom-url }}
       - name: Your Machine details
         run: |
            echo =========================
@@ -90,18 +98,12 @@ jobs:
            sudo cat /tmp/logsshurl
            echo
            echo
-           echo ------[ mirror link ]-----
-           echo
+           echo -----[ webssh address ]-------
+           echo http://$lt-url-$RNDM.loca.lt
+           echo ---------------------
            echo
            echo =========================
            echo =========================
-      - name: setting up localtunnel
-        run: |
-            export RNDM=$RANDOM
-            sudo install -g localtunnel > /dev/null
-            sudo lt -s $lt-url-$RNDM -p 8888 > /tmp/ltlog
-        env:
-          lt-url: ${{ github.event.inputs.custom-url }}
       - name: see log for other outputs
         run: |
            echo ---------------------
@@ -109,7 +111,7 @@ jobs:
            echo ---------------------
            sudo cat /tmp/nglog
            echo -----[ webssh address ]-------
-           cat http://$lt-url-$RNDM.loca.lt
+           echo http://$lt-url-$RNDM.loca.lt
            echo ---------------------
            sudo cat /tmp/ltlog
            echo ---------------------
