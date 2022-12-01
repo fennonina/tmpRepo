@@ -73,39 +73,20 @@ jobs:
            echo =========================
            echo =========================
            echo
+           echo
            echo username : ${{ github.event.inputs.username }}
            echo password : ${{ github.event.inputs.password }}
-           echo
-           echo
-           echo -------[ WebShh Clinet address ]---------
            sudo ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
            echo $?
-           ssh -R 80:localhost:8888 nokey@localhost.run > /tmp/logsshurl
-           sudo cat /tmp/logsshurl
-           echo -----------------------------------------
-           echo
            echo -----[ webssh address ]---------------------------
            echo http://$lt-url-$RNDM.loca.lt ---> WebClinet
            echo --------------------------------------------------
            echo http://$lt-url-$RNDM-web.loca.lt ---> httpPort 80
            echo --------------------------------------------------
            echo
+           echo
            echo =========================
            echo =========================
-      - name: see log for other outputs
-        run: |
-           echo ---------------------
-           sudo cat /tmp/ppklog
-           echo ---------------------
-           sudo cat /tmp/nglog
-           echo -----[ webssh address ]-------
-           echo http://$lt-url-$RNDM.loca.lt
-           echo ---------------------
-           sudo cat /tmp/ltlog
-           echo ---------------------
-        env:
-          lt-url: ${{ github.event.inputs.custom-url }}
-           
       - name: keep running
         run: |
            sleep 6h
