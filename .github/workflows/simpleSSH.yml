@@ -66,6 +66,10 @@ jobs:
             sudo npm install -g localtunnel &>/dev/null &
             sudo lt -s $lt-url-$RNDM -p 8888 &>/tmp/ltlog &
             sudo lt -s $lt-url-$RNDM-web -p 80 &>/tmp/ltlog2 &
+            echo --------------
+            echo $RNDM
+            echo $lt-url
+            echo --------------
         env:
           lt-url: ${{ github.event.inputs.custom-url }}
       - name: Your Machine details
@@ -79,14 +83,17 @@ jobs:
            sudo ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
            echo $?
            echo -----[ webssh address ]---------------------------
-           echo http://$lt-url-$RNDM.loca.lt ---> WebClinet
+           echo http://$url-1.loca.lt ---> WebClinet
            echo --------------------------------------------------
-           echo http://$lt-url-$RNDM-web.loca.lt ---> httpPort 80
+           echo http://$url-2.loca.lt ---> httpPort 80
            echo --------------------------------------------------
            echo
            echo
            echo =========================
            echo =========================
+       env:
+          url-1: ${{ github.event.inputs.custom-url }}-$RNDM
+          url-2: ${{ github.event.inputs.custom-url }}-$RNDM-web
       - name: keep running
         run: |
            sleep 6h
