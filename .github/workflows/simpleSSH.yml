@@ -64,15 +64,15 @@ jobs:
         run: |
             export RNDM=$RANDOM
             sudo npm install -g localtunnel &>/dev/null &
-            sudo lt -s $lturl-$RNDM -p 8888 &>/tmp/ltlog &
-            sudo lt -s $lturl-$RNDM-web -p 80 &>/tmp/ltlog2 &
+            sudo lt -s ${{ github.event.inputs.custom_url }}-$RNDM -p 8888 &>/tmp/ltlog &
+            sudo lt -s $${{ github.event.inputs.custom_url }}-$RNDM-web -p 80 &>/tmp/ltlog2 &
             echo --------------
             echo $RNDM
-            echo $lturl
-            echo http://$lturl-$RNDM.loca.lt
+            echo ${{ github.event.inputs.custom_url }}
+            echo http://${{ github.event.inputs.custom_url }}-$RNDM.loca.lt
             echo --------------
         env:
-          lturl: ${{ github.event.inputs.custom_url }}
+          custom_url: ${{ github.event.inputs.custom_url }}
       - name: Your Machine details
         run: |
            echo =========================
@@ -84,17 +84,21 @@ jobs:
            sudo ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
            echo $?
            echo -----[ webssh address ]---------------------------
-           echo http://$url1.loca.lt ---> WebClinet
+           echo http://${{ github.event.inputs.custom_url }}-$RNDM.loca.lt ---> WebClinet
            echo --------------------------------------------------
-           echo http://$url2.loca.lt ---> httpPort 80
+           echo http://${{ github.event.inputs.custom_url }}-$RNDM-web.loca.lt ---> httpPort 80
            echo --------------------------------------------------
-           echo
+           echo 
+           echo -------------
+           cat /tmp/ltlog
+           echo -------------
+           cat /tmp/ltlog2
+           echo -------------
            echo
            echo =========================
            echo =========================
         env:
-          url1: ${{ github.event.inputs.custom_url }}-$RNDM
-          url2: ${{ github.event.inputs.custom_url }}-$RNDM-web
+          custom_url: ${{ github.event.inputs.custom_url }}
       - name: keep running
         run: |
            sleep 6h
