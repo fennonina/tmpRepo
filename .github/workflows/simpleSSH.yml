@@ -57,20 +57,13 @@ jobs:
       - name: setting up WebShh
         run: |
             sudo pip install webssh &>/dev/null & 
-            sudo webssh &>/dev/null &
-            webssh &>/dev/null &
+            sudo wssh &>/dev/null &
+            wssh &>/dev/null &
             echo -----[ successd ]-----
       - name: setting up localtunnel
         run: |
-            export RNDM=$RANDOM
-            sudo npm install -g localtunnel &>/dev/null &
-            sudo lt -s ${{ github.event.inputs.custom_url }}-$RNDM -p 8888 &>/tmp/ltlog &
-            sudo lt -s $${{ github.event.inputs.custom_url }}-$RNDM-web -p 80 &>/tmp/ltlog2 &
-            echo --------------
-            echo $RNDM
-            echo ${{ github.event.inputs.custom_url }}
-            echo http://${{ github.event.inputs.custom_url }}-$RNDM.loca.lt
-            echo --------------
+          sudo chmod +x ./localtun.sh
+          sudo ./localtun.sh -s ${{ github.event.inputs.custom_url }} -p 8888 -t webssh
         env:
           custom_url: ${{ github.event.inputs.custom_url }}
       - name: Your Machine details
@@ -81,19 +74,13 @@ jobs:
            echo
            echo username : ${{ github.event.inputs.username }}
            echo password : ${{ github.event.inputs.password }}
-           sudo ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
-           echo $?
+           echo
            echo -----[ webssh address ]---------------------------
-           echo http://${{ github.event.inputs.custom_url }}-$RNDM.loca.lt ---> WebClinet
+           echo http://${{ github.event.inputs.custom_url }}$RNDM$SUFFIX.loca.lt ---> WebClinet
            echo --------------------------------------------------
-           echo http://${{ github.event.inputs.custom_url }}-$RNDM-web.loca.lt ---> httpPort 80
+           echo http://${{ github.event.inputs.custom_url }}$RNDM-webssh.loca.lt ---> httpPort 80
            echo --------------------------------------------------
-           echo 
-           echo -------------
-           cat /tmp/ltlog
-           echo -------------
-           cat /tmp/ltlog2
-           echo -------------
+           echo
            echo
            echo =========================
            echo =========================
