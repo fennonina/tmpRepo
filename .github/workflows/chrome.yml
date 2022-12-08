@@ -24,6 +24,6 @@ jobs:
         run: |
           sudo docker run -p 3000:3000 browserless/chrome &>/dev/null & sleep 7
       - name: Getting you  ready.
-        run: sudo ./localtun.sh -s ${{ gitub.evemt.inputs.customurl }} -p 3000 -t chrome 
+        run: sudo ./localtun.sh -s ${{ github.event.inputs.customurl }} -p 3000 -t chrome 
       - name: Keep running.
         run: sleep 6h
