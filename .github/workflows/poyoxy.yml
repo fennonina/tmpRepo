@@ -26,7 +26,7 @@ jobs:
           wget https://www.php-proxy.com/download/php-proxy.zip
           sudo mkdir /var/www/html/poyox/
           sudo cp -r php-proxy.zip /var/www/html/poyox/
-          sudo unzip php-proxy.zip
+          sudo unzip /var/www/html/poyox/php-proxy.zip
           echo -------------------------------------
           sudo cd /var/www/html/poyox/ ; sudo ls
           echo -------------------------------------   
