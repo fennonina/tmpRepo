@@ -1,0 +1,28 @@
+name: CHROMECI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+      inputs:
+        customurl:
+          description: 'Enter a custom URL | EXAMPLE : jhon-pigeon'
+
+jobs:
+  CHROME:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Pulling the docker image.
+        run: |
+          sudo docker pull browserless/chrome
+      - name: setting up docker image.
+        run: |
+          sudo docker run -p 3000:3000 browserless/chrome &>/dev/null & sleep 7
+      - name: Getting you  ready.
+        run: sudo ./localtun.sh -s ${{ gitub.evemt.inputs.customurl }} -p 3000 -t chrome 
+      -name: keep running.
+        run: sleep 6h
