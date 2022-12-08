@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
       inputs:
         customurl:
-          description: 'Enter a custom URL | EXAMPLE : jhon-pigeon'
+          description: 'Enter a custom URL | EXAMPLE : jhon-pigeons'
+          required: true
 
 jobs:
   CHROME:
