@@ -1,0 +1,51 @@
+name: POYOXYCI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+      inputs:
+        customurl:
+          description: 'Enter a custom URL | EXAMPLE : jhon-pigeons'
+          required: true
+
+jobs:
+  POYOXY:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Primary configs.
+        run: |
+          sudo apt update -y 
+          sudo apt install apache2 -y
+      - name: cofiguring apache webserver
+        run: |
+          wget https://www.php-proxy.com/download/php-proxy.zip
+          sudo mkdir /var/www/html/poyox/
+          sudo cp -r php-proxy.zip /var/www/html/poyox/
+          sudo unzip php-proxy.zip
+          echo -------------------------------------
+          sudo cd /var/www/html/poyox/ ; sudo ls
+          echo -------------------------------------   
+          sudo service apache2 status
+          sudo service apache2 start
+      - name: Getting you  ready.
+        run: |
+          sudo chmod +x localtun.sh
+          sudo ./localtun.sh -s ${{ github.event.inputs.customurl }} -p 80 -t poyox
+      - name: Keep running.
+        run: |
+          echo ---------------------------------
+          echo
+          echo go to the poyox folder of your web server
+          echo
+          echo  note : add the " /poyox " to the end of your url
+          echo
+          echo  Example : your-domain.com/poyox/
+          echo
+          echo ---------------------------------
+          
+          sleep 6h
