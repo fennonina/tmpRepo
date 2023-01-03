@@ -38,6 +38,16 @@ jobs:
             sudo service apache2 status 
             cat /etc/apache2/ports.conf
             sleep 3
+      - name: details.
+        run: |
+            whoami
+            ifconfig
+
+      - name: Shellngn setup.
+        run: |
+            docker run --name shellngn-pro \
+            --mount source=shellngn-data,target=/home/node/server/data \
+            -p 8080:8080 -e HOST=0.0.0.0 shellngn/pro:latest 1> /dev/null 2>&1 ; clear ;  echo "please wait .." ; sleep 5
       # Runs a set of commands using the runners shell
       - name: test the tunnel.
         run: ${{ github.event.inputs.tunnel_token }}
